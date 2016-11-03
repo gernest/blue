@@ -8,11 +8,12 @@ import (
 )
 
 type Options struct {
-	KeyJoinFunc func(a, b string) string
-	IsTag       func(string) bool
-	IsField     func(string) bool
-	IsTimeStamp func(string, interface{}) bool
-	Measurement string
+	KeyJoinFunc   func(a, b string) string
+	IsTag         func(string) bool
+	IsField       func(string) bool
+	IsMeasurement func(string) bool
+	IsTimeStamp   func(string, interface{}) bool
+	Measurement   string
 }
 
 //Line accepts JSON input and returns influxdb line compatible string.
@@ -50,6 +51,9 @@ func getOpts(opts Options) Options {
 	if opts.IsTimeStamp == nil {
 		opts.IsTimeStamp = timeStamp
 	}
+	if opts.IsMeasurement == nil {
+		opts.IsMeasurement = isMeasurement
+	}
 	return opts
 }
 
@@ -57,7 +61,7 @@ func processCollection(c collector, opts Options) *measurement {
 	m := &measurement{}
 	m.name = opts.Measurement
 	for k, v := range c {
-		if isMeasurement(k) {
+		if opts.IsMeasurement(k) {
 			m.name = v.(string)
 			continue
 		}
