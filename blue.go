@@ -43,16 +43,16 @@ func line(src []byte, opts Options) (string, error) {
 
 func getOpts(opts Options) Options {
 	if opts.IsTag == nil {
-		opts.IsTag = isTag
+		opts.IsTag = IsTag
 	}
 	if opts.IsField == nil {
-		opts.IsField = isField
+		opts.IsField = IsField
 	}
 	if opts.IsTimeStamp == nil {
-		opts.IsTimeStamp = timeStamp
+		opts.IsTimeStamp = IsTimeStamp
 	}
 	if opts.IsMeasurement == nil {
-		opts.IsMeasurement = isMeasurement
+		opts.IsMeasurement = IsMeasurement
 	}
 	return opts
 }

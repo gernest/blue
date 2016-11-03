@@ -9,7 +9,7 @@ func joinkey(a, b string) string {
 	return b
 }
 
-func timeStamp(key string, value interface{}) bool {
+func IsTimeStamp(key string, value interface{}) bool {
 	if key == "" {
 		return false
 	}
@@ -20,14 +20,15 @@ func timeStamp(key string, value interface{}) bool {
 	return false
 }
 
-func isTag(key string) bool {
+func IsTag(key string) bool {
 	return false
 }
-func isField(key string) bool {
+
+func IsField(key string) bool {
 	return true
 }
 
-func isMeasurement(key string) bool {
+func IsMeasurement(key string) bool {
 	if key == "" {
 		return false
 	}
