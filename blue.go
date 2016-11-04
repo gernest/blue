@@ -82,10 +82,12 @@ func processCollection(c collector, opts Options) *measurement {
 				continue
 			}
 		}
-		if m.fields == nil {
-			m.fields = make(fields, 0)
+		if opts.IsField(k) {
+			if m.fields == nil {
+				m.fields = make(fields, 0)
+			}
+			m.fields = append(m.fields, &field{key: k, value: v})
 		}
-		m.fields = append(m.fields, &field{key: k, value: v})
 	}
 	return m
 }
