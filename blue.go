@@ -11,7 +11,7 @@ type Options struct {
 	KeyJoinFunc   func(a, b string) string
 	IsTag         func(string) bool
 	IsField       func(string) bool
-	IsMeasurement func(string) bool
+	IsMeasurement func(string, interface{}) (string, bool)
 	IsTimeStamp   func(string, interface{}) bool
 	Measurement   string
 }
@@ -61,9 +61,11 @@ func processCollection(c collector, opts Options) *measurement {
 	m := &measurement{}
 	m.name = opts.Measurement
 	for k, v := range c {
-		if opts.IsMeasurement(k) {
-			m.name = v.(string)
-			continue
+		if m.name == "" {
+			if msr, ok := opts.IsMeasurement(k, v); ok {
+				m.name = msr
+				continue
+			}
 		}
 		if opts.IsTag(k) {
 			if m.tags == nil {

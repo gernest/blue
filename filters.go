@@ -28,10 +28,14 @@ func IsField(key string) bool {
 	return true
 }
 
-func IsMeasurement(key string) bool {
+func IsMeasurement(key string, value interface{}) (string, bool) {
 	if key == "" {
-		return false
+		return "", false
 	}
-	low := strings.ToLower(key)
-	return low == "measurement"
+	if key == "measurement" {
+		if s, ok := value.(string); ok {
+			return s, true
+		}
+	}
+	return "", false
 }
