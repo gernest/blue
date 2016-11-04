@@ -64,7 +64,6 @@ func processCollection(c collector, opts Options) *measurement {
 		if m.name == "" {
 			if msr, ok := opts.IsMeasurement(k, v); ok {
 				m.name = msr
-				continue
 			}
 		}
 		if opts.IsTag(k) {
