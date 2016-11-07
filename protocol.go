@@ -7,27 +7,31 @@ import (
 	"time"
 )
 
-type measurement struct {
+type Measurement struct {
 	name      string
-	tags      tags
-	fields    fields
-	timestamp time.Time
+	Tags      tags
+	Fields    fields
+	Timestamp time.Time
 }
 
-func (m *measurement) line() string {
+func (m *Measurement) String() string {
+	return m.line()
+}
+
+func (m *Measurement) line() string {
 	var buf bytes.Buffer
 	buf.WriteString(escape(m.name))
-	if m.tags != nil {
+	if m.Tags != nil {
 		buf.WriteRune(',')
-		buf.WriteString(m.tags.line())
+		buf.WriteString(m.Tags.line())
 	}
-	if m.fields != nil {
+	if m.Fields != nil {
 		buf.WriteRune(' ')
-		buf.WriteString(m.fields.line())
+		buf.WriteString(m.Fields.line())
 	}
-	if !m.timestamp.IsZero() {
+	if !m.Timestamp.IsZero() {
 		buf.WriteRune(' ')
-		buf.WriteString(fmt.Sprint(m.timestamp.UnixNano()))
+		buf.WriteString(fmt.Sprint(m.Timestamp.UnixNano()))
 	}
 	return buf.String()
 }

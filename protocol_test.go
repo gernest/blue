@@ -106,11 +106,11 @@ func TestMeasurment(t *testing.T) {
 
 	for _, v := range sample {
 		m :=
-			&measurement{
+			&Measurement{
 				name:      v.measure,
-				tags:      v.tags,
-				fields:    v.fields,
-				timestamp: v.timestamp,
+				Tags:      v.tags,
+				Fields:    v.fields,
+				Timestamp: v.timestamp,
 			}
 		line := m.line()
 		if line != v.expect {

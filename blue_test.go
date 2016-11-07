@@ -27,12 +27,13 @@ func TestLine(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		s, err := Line(bytes.NewReader(i), Options{
+		ss, err := Line(i, Options{
 			IsTag: tagFunc("host", "region"),
 		})
 		if err != nil {
 			t.Fatal(err)
 		}
+		s := ss.line()
 		e, err := ioutil.ReadFile(filepath.Join(outputDir, v))
 		if err != nil {
 			t.Fatal(err)

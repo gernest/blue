@@ -2,8 +2,6 @@ package blue
 
 import (
 	"encoding/json"
-	"io"
-	"io/ioutil"
 	"time"
 )
 
@@ -16,29 +14,20 @@ type Options struct {
 	Measurement   string
 }
 
-//Line accepts JSON input and returns influxdb line compatible string.
-func Line(src io.Reader, opts Options) (string, error) {
-	data, err := ioutil.ReadAll(src)
-	if err != nil {
-		return "", err
-	}
-	return line(data, opts)
-}
-
-func line(src []byte, opts Options) (string, error) {
+func Line(src []byte, opts Options) (*Measurement, error) {
 	object := make(map[string]interface{})
 	err := json.Unmarshal(src, &object)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	opts = getOpts(opts)
 	ctx := newCtx(opts)
 	err = process(ctx, "", object)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	m := processCollection(ctx.c, opts)
-	return m.line(), nil
+	m := processCollection(ctx.C, opts)
+	return m, nil
 }
 
 func getOpts(opts Options) Options {
@@ -57,8 +46,8 @@ func getOpts(opts Options) Options {
 	return opts
 }
 
-func processCollection(c collector, opts Options) *measurement {
-	m := &measurement{}
+func processCollection(c collector, opts Options) *Measurement {
+	m := &Measurement{}
 	m.name = opts.Measurement
 	for k, v := range c {
 		if m.name == "" {
@@ -67,20 +56,20 @@ func processCollection(c collector, opts Options) *measurement {
 			}
 		}
 		if opts.IsTag(k) {
-			if m.tags == nil {
-				m.tags = make(tags, 0)
+			if m.Tags == nil {
+				m.Tags = make(tags, 0)
 			}
-			m.tags = append(m.tags, &tag{key: k, value: v})
+			m.Tags = append(m.Tags, &tag{key: k, value: v})
 			continue
 		}
 		if ts, ok := opts.IsTimeStamp(k, v); ok {
-			m.timestamp = ts
+			m.Timestamp = ts
 		}
 		if opts.IsField(k) {
-			if m.fields == nil {
-				m.fields = make(fields, 0)
+			if m.Fields == nil {
+				m.Fields = make(fields, 0)
 			}
-			m.fields = append(m.fields, &field{key: k, value: v})
+			m.Fields = append(m.Fields, &field{key: k, value: v})
 		}
 	}
 	return m
@@ -92,26 +81,26 @@ func (c collector) set(key string, value interface{}) {
 	c[key] = value
 }
 
-type context struct {
-	c       collector
+type Context struct {
+	C       collector
 	keyJoin func(a, b string) string
 }
 
-func newCtx(o Options) *context {
-	ctx := &context{}
+func newCtx(o Options) *Context {
+	ctx := &Context{}
 	if o.KeyJoinFunc != nil {
 		ctx.keyJoin = o.KeyJoinFunc
 	} else {
 		ctx.keyJoin = joinkey
 	}
-	ctx.c = make(collector)
+	ctx.C = make(collector)
 	return ctx
 }
 
-func process(ctx *context, ns string, v interface{}) error {
+func process(ctx *Context, ns string, v interface{}) error {
 	switch v.(type) {
 	case bool, float64, string:
-		ctx.c.set(ns, v)
+		ctx.C.set(ns, v)
 	case []interface{}:
 		for _, i := range v.([]interface{}) {
 			err := process(ctx, ns, i)
