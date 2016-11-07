@@ -12,7 +12,7 @@ type Options struct {
 	IsTag         func(string) bool
 	IsField       func(string) bool
 	IsMeasurement func(string, interface{}) (string, bool)
-	IsTimeStamp   func(string, interface{}) bool
+	IsTimeStamp   func(string, interface{}) (time.Time, bool)
 	Measurement   string
 }
 
@@ -73,13 +73,8 @@ func processCollection(c collector, opts Options) *measurement {
 			m.tags = append(m.tags, &tag{key: k, value: v})
 			continue
 		}
-		if opts.IsTimeStamp(k, v) {
-			switch v.(type) {
-			case float64:
-				fv := v.(float64)
-				m.timestamp = time.Unix(0, int64(fv))
-				continue
-			}
+		if ts, ok := opts.IsTimeStamp(k, v); ok {
+			m.timestamp = ts
 		}
 		if opts.IsField(k) {
 			if m.fields == nil {

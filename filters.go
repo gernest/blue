@@ -1,6 +1,9 @@
 package blue
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 func joinkey(a, b string) string {
 	if a != "" {
@@ -9,15 +12,17 @@ func joinkey(a, b string) string {
 	return b
 }
 
-func IsTimeStamp(key string, value interface{}) bool {
+func IsTimeStamp(key string, value interface{}) (time.Time, bool) {
 	if key == "" {
-		return false
+		return time.Time{}, false
 	}
 	low := strings.ToLower(key)
 	if low == "timestamp" {
-		return true
+		if ns, ok := value.(float64); ok {
+			return time.Unix(0, int64(ns)), true
+		}
 	}
-	return false
+	return time.Time{}, false
 }
 
 func IsTag(key string) bool {
@@ -25,7 +30,7 @@ func IsTag(key string) bool {
 }
 
 func IsField(key string) bool {
-	return true
+	return key != "measurement" && key != "timestamp"
 }
 
 func IsMeasurement(key string, value interface{}) (string, bool) {
