@@ -8,7 +8,7 @@ import (
 )
 
 type Measurement struct {
-	name      string
+	Name      string
 	Tags      tags
 	Fields    fields
 	Timestamp time.Time
@@ -20,7 +20,7 @@ func (m *Measurement) String() string {
 
 func (m *Measurement) line() string {
 	var buf bytes.Buffer
-	buf.WriteString(escape(m.name))
+	buf.WriteString(escape(m.Name))
 	if m.Tags != nil {
 		buf.WriteRune(',')
 		buf.WriteString(m.Tags.line())

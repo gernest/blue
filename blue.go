@@ -48,11 +48,11 @@ func getOpts(opts Options) Options {
 
 func processCollection(c collector, opts Options) *Measurement {
 	m := &Measurement{}
-	m.name = opts.Measurement
+	m.Name = opts.Measurement
 	for k, v := range c {
-		if m.name == "" {
+		if m.Name == "" {
 			if msr, ok := opts.IsMeasurement(k, v); ok {
-				m.name = msr
+				m.Name = msr
 			}
 		}
 		if opts.IsTag(k) {

@@ -107,7 +107,7 @@ func TestMeasurment(t *testing.T) {
 	for _, v := range sample {
 		m :=
 			&Measurement{
-				name:      v.measure,
+				Name:      v.measure,
 				Tags:      v.tags,
 				Fields:    v.fields,
 				Timestamp: v.timestamp,
