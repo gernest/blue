@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+//Options provides fine grained options for processing the json input.
 type Options struct {
 	KeyJoinFunc   func(a, b string) string
 	IsTag         func(string) bool
@@ -14,6 +15,8 @@ type Options struct {
 	Measurement   string
 }
 
+//Line generates *Measurement object from the src. src is expected to be a valid
+//json input.
 func Line(src []byte, opts Options) (*Measurement, error) {
 	object := make(map[string]interface{})
 	err := json.Unmarshal(src, &object)
@@ -81,6 +84,8 @@ func (c collector) set(key string, value interface{}) {
 	c[key] = value
 }
 
+//Context is the procesing context for json input. It is where the key, value
+//pairs are collected.
 type Context struct {
 	C       collector
 	keyJoin func(a, b string) string

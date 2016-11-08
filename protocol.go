@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//Measurement represent influxdb metric.
 type Measurement struct {
 	Name      string
 	Tags      Tags
@@ -20,22 +21,23 @@ func (m *Measurement) String() string {
 
 func (m *Measurement) line() string {
 	var buf bytes.Buffer
-	buf.WriteString(escape(m.Name))
+	_, _ = buf.WriteString(escape(m.Name))
 	if m.Tags != nil {
-		buf.WriteRune(',')
-		buf.WriteString(m.Tags.Line())
+		_, _ = buf.WriteRune(',')
+		_, _ = buf.WriteString(m.Tags.Line())
 	}
 	if m.Fields != nil {
-		buf.WriteRune(' ')
-		buf.WriteString(m.Fields.Line())
+		_, _ = buf.WriteRune(' ')
+		_, _ = buf.WriteString(m.Fields.Line())
 	}
 	if !m.Timestamp.IsZero() {
-		buf.WriteRune(' ')
-		buf.WriteString(fmt.Sprint(m.Timestamp.UnixNano()))
+		_, _ = buf.WriteRune(' ')
+		_, _ = buf.WriteString(fmt.Sprint(m.Timestamp.UnixNano()))
 	}
 	return buf.String()
 }
 
+//Unit is a  key value pair.
 type Unit struct {
 	Key   string
 	Value interface{}
@@ -69,17 +71,19 @@ func escape(src string) string {
 	for _, v := range src {
 		switch v {
 		case ' ', ',', '=', '"':
-			buf.WriteString(`\`)
-			buf.WriteRune(v)
+			_, _ = buf.WriteString(`\`)
+			_, _ = buf.WriteRune(v)
 		default:
-			buf.WriteRune(v)
+			_, _ = buf.WriteRune(v)
 		}
 	}
 	return buf.String()
 }
 
+//Field is a Unit that represent influxbd field.
 type Field Unit
 
+//Line returns string representation of the underlying Field.
 func (f *Field) Line() string {
 	f.Key = escape(f.Key)
 	switch f.Value.(type) {
@@ -91,6 +95,7 @@ func (f *Field) Line() string {
 	return f.Key + "=" + fmt.Sprint(f.Value)
 }
 
+//Fields is a list of Fields.
 type Fields []*Field
 
 func (f Fields) Len() int {
@@ -104,27 +109,33 @@ func (f Fields) Swap(i, j int) {
 	f[i], f[j] = f[j], f[i]
 }
 
+//Line returns the string representation of the underlying fields that complies
+//with influxdb line protocol.
 func (f Fields) Line() string {
 	sort.Sort(f)
 	var buf bytes.Buffer
 	for _, v := range f {
 		if buf.Len() == 0 {
-			buf.WriteString(v.Line())
+			_, _ = buf.WriteString(v.Line())
 			continue
 		}
-		buf.WriteRune(',')
-		buf.WriteString(v.Line())
+		_, _ = buf.WriteRune(',')
+		_, _ = buf.WriteString(v.Line())
 	}
 	return buf.String()
 }
 
+//Tag is a Unit representing influxdb field.
 type Tag Unit
 
+//Line returns influxdb line protocl compliant string representation of the
+//field.
 func (t Tag) Line() string {
 	u := Unit(t)
 	return u.escape().line()
 }
 
+//Tags is a list of Tag
 type Tags []*Tag
 
 func (t Tags) Len() int {
@@ -138,16 +149,18 @@ func (t Tags) Swap(i, j int) {
 	t[i], t[j] = t[j], t[i]
 }
 
+//Line returns influxdb line protocol compliant string representation of the
+//underlying tags.
 func (t Tags) Line() string {
 	sort.Sort(t)
 	var buf bytes.Buffer
 	for _, v := range t {
 		if buf.Len() == 0 {
-			buf.WriteString(v.Line())
+			_, _ = buf.WriteString(v.Line())
 			continue
 		}
-		buf.WriteRune(',')
-		buf.WriteString(v.Line())
+		_, _ = buf.WriteRune(',')
+		_, _ = buf.WriteString(v.Line())
 	}
 	return buf.String()
 }
