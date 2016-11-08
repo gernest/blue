@@ -43,8 +43,8 @@ func TestField(t *testing.T) {
 		}
 
 	for _, v := range sample {
-		f := field(unit{key: v.key, value: v.value})
-		line := f.line()
+		f := Field{Key: v.key, Value: v.value}
+		line := f.Line()
 		if line != v.expect {
 			t.Errorf("expected %s got %s", v.expect, line)
 		}
@@ -52,43 +52,43 @@ func TestField(t *testing.T) {
 }
 
 func TestMeasurment(t *testing.T) {
-	t0 := tags{
+	t0 := Tags{
 		{"host", "serverA"},
 		{"region", "us-west"},
 	}
-	t1 := tags{
+	t1 := Tags{
 		{"host", "server A"},
 		{"region", "us west"},
 	}
-	t3 := tags{
+	t3 := Tags{
 		{"host", "server01"},
 		{"region", "uswest"},
 	}
-	f0 := fields{
+	f0 := Fields{
 		{"value", 1},
 	}
-	f1 := fields{
+	f1 := Fields{
 		{"value", 1.0},
 	}
-	f2 := fields{
+	f2 := Fields{
 		{"value", true},
 	}
-	f3 := fields{
+	f3 := Fields{
 		{"value", "logged out"},
 	}
-	f4 := fields{
+	f4 := Fields{
 		{"load", 10},
 		{"alert", true},
 		{"reason", "value above maximum threshold"},
 	}
-	f5 := fields{
+	f5 := Fields{
 		{"value", 1.0},
 	}
 	ts := time.Unix(0, 1434055562000000000)
 	sample := []struct {
 		measure   string
-		tags      tags
-		fields    fields
+		tags      Tags
+		fields    Fields
 		timestamp time.Time
 		expect    string
 	}{

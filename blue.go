@@ -57,9 +57,9 @@ func processCollection(c collector, opts Options) *Measurement {
 		}
 		if opts.IsTag(k) {
 			if m.Tags == nil {
-				m.Tags = make(tags, 0)
+				m.Tags = make(Tags, 0)
 			}
-			m.Tags = append(m.Tags, &tag{key: k, value: v})
+			m.Tags = append(m.Tags, &Tag{Key: k, Value: v})
 			continue
 		}
 		if ts, ok := opts.IsTimeStamp(k, v); ok {
@@ -67,9 +67,9 @@ func processCollection(c collector, opts Options) *Measurement {
 		}
 		if opts.IsField(k) {
 			if m.Fields == nil {
-				m.Fields = make(fields, 0)
+				m.Fields = make(Fields, 0)
 			}
-			m.Fields = append(m.Fields, &field{key: k, value: v})
+			m.Fields = append(m.Fields, &Field{Key: k, Value: v})
 		}
 	}
 	return m
