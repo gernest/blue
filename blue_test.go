@@ -45,15 +45,15 @@ func TestLine(t *testing.T) {
 	}
 }
 
-func tagFunc(tg ...string) func(string) bool {
-	return func(key string) bool {
+func tagFunc(tg ...string) func(string) (string, bool) {
+	return func(key string) (string, bool) {
 		low := strings.ToLower(key)
 		for _, v := range tg {
 			t := strings.ToLower(v)
 			if t == low {
-				return true
+				return key, true
 			}
 		}
-		return false
+		return "", false
 	}
 }

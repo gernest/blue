@@ -8,7 +8,7 @@ import (
 //Options provides fine grained options for processing the json input.
 type Options struct {
 	KeyJoinFunc   func(a, b string) string
-	IsTag         func(string) bool
+	IsTag         func(string) (string, bool)
 	IsField       func(string) bool
 	IsMeasurement func(string, interface{}) (string, bool)
 	IsTimeStamp   func(string, interface{}) (time.Time, bool)
@@ -58,11 +58,14 @@ func processCollection(c collector, opts Options) *Measurement {
 				m.Name = msr
 			}
 		}
-		if opts.IsTag(k) {
+		if tg, ok := opts.IsTag(k); ok {
 			if m.Tags == nil {
 				m.Tags = make(Tags, 0)
 			}
-			m.Tags = append(m.Tags, &Tag{Key: k, Value: v})
+			if tg == "" {
+				tg = k
+			}
+			m.Tags = append(m.Tags, &Tag{Key: tg, Value: v})
 			continue
 		}
 		if ts, ok := opts.IsTimeStamp(k, v); ok {

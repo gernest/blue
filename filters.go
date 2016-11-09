@@ -31,8 +31,8 @@ func IsTimeStamp(key string, value interface{}) (time.Time, bool) {
 }
 
 //IsTag checks if key is tag. This is always false.
-func IsTag(key string) bool {
-	return false
+func IsTag(key string) (string, bool) {
+	return "", false
 }
 
 //IsField checks whether the key is a field. This is always true except when the
