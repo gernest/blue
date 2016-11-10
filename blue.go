@@ -96,8 +96,10 @@ func processCollection(c collector, opts Options) *Measurement {
 			m.Tags = append(m.Tags, &Tag{Key: tg, Value: v})
 			continue
 		}
-		if ts, ok := opts.IsTimeStamp(k, v); ok {
-			m.Timestamp = ts
+		if m.Timestamp.IsZero() {
+			if ts, ok := opts.IsTimeStamp(k, v); ok {
+				m.Timestamp = ts
+			}
 		}
 		if opts.IsField(k) {
 			if m.Fields == nil {
