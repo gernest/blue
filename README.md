@@ -18,6 +18,8 @@ Generates influxdb line protocol from json objects.
    - Timestamps
 
 * Works on arbitrary json input.
+* Tags and Fields are sorted. This is per recommendation from influxdb
+  documentation.
 
 
 # The steps taken when processing the json input
