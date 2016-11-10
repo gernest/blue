@@ -11,7 +11,7 @@ Generates influxdb line protocol from json objects.
 
 After saying that you should also know, I tested this on a live influxdb instance
 by hooking up a telegraf tail plugin to a named pipe that another commandline
-library was writing to( after converting live stream of json input to the
+application was writing to( after converting live stream of json input to the
 influxdb line protocol using this library)
 
 # Features
@@ -60,7 +60,7 @@ pic what the user thinks is important. The main components are,
 - Fields
 
 The user of this library, has control on all the mentioned components. The
-Options strct looks like this.
+Options struct looks like this.
 
 ```go
 type Options struct {
