@@ -104,10 +104,68 @@ type Options struct {
 Specifying the Measurement field will make the IsMeasurent function to be
 ignored.
 
-## Output
+# Installation
+```shell
+go get github.com/gernest/blue
+```
 
-Just call the `Line()` method of the returned `*Measurement` object and influxdb
-line compliant string will be generated.
 
+# Usage
+```go
 
-# Example Usage
+package main
+
+import (
+	"fmt"
+	"log"
+	"strings"
+
+	"github.com/gernest/blue"
+)
+
+const src = `
+{
+	"timestamp":1434055562000000000,
+	"tags":{
+		"noun":"broke",
+		"verb":"bankrupt"
+	},
+	"anger_level":80,
+	"this":{
+		"is":{
+			"nested":{
+				"value": 1
+			}
+		}
+	}
+}
+`
+
+func main() {
+	o := blue.Options{
+		KeyJoinFunc: func(a, b string) string {
+			if a == "" {
+				return b
+			}
+			return a + "_" + b
+		},
+		IsTag: func(key string) (string, bool) {
+			prefix := "tags_"
+			if strings.HasPrefix(key, prefix) {
+				return strings.TrimPrefix(key, prefix), true
+			}
+			return "", false
+		},
+		IsField: func(key string) bool {
+			return true
+		},
+		Measurement: "ordinary",
+	}
+	m, err := blue.Line([]byte(src), o)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(m)
+	//ordinary,noun=broke,verb=bankrupt anger_level=80,this_is_nested_value=1 1434055562000000000
+}
+```
