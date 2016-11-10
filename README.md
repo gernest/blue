@@ -2,7 +2,7 @@
 
 #blue.Line ![blue logo](logo-512.png)
 
-[![GoDoc](https://godoc.org/github.com/gernest/blue?status.svg)](https://godoc.org/github.com/gernest/blue) [![Go Report Card](https://goreportcard.com/badge/github.com/gernest/blue)](https://goreportcard.com/report/github.com/gernest/blue)  [![Build Status](https://travis-ci.org/gernest/blue.svg?branch=master)](https://travis-ci.org/gernest/blue)
+[![GoDoc](https://godoc.org/github.com/gernest/blue?status.svg)](https://godoc.org/github.com/gernest/blue) [![Go Report Card](https://goreportcard.com/badge/github.com/gernest/blue)](https://goreportcard.com/report/github.com/gernest/blue)  [![Build Status](https://travis-ci.org/gernest/blue.svg?branch=master)](https://travis-ci.org/gernest/blue) [![Coverage Status](https://coveralls.io/repos/github/gernest/blue/badge.svg?branch=master)](https://coveralls.io/github/gernest/blue?branch=master)
 
 Generates influxdb line protocol from json objects.
 
