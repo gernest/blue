@@ -25,7 +25,7 @@ func Line(src []byte, opts Options) (*Measurement, error) {
 	}
 	opts = getOpts(opts)
 	ctx := newCtx(opts)
-	err = process(ctx, "", object)
+	err = collect(ctx, "", object)
 	if err != nil {
 		return nil, err
 	}
@@ -105,20 +105,20 @@ func newCtx(o Options) *Context {
 	return ctx
 }
 
-func process(ctx *Context, ns string, v interface{}) error {
+func collect(ctx *Context, ns string, v interface{}) error {
 	switch v.(type) {
 	case bool, float64, string:
 		ctx.C.set(ns, v)
 	case []interface{}:
 		for _, i := range v.([]interface{}) {
-			err := process(ctx, ns, i)
+			err := collect(ctx, ns, i)
 			if err != nil {
 				return err
 			}
 		}
 	case map[string]interface{}:
 		for key, value := range v.(map[string]interface{}) {
-			err := process(ctx, ctx.keyJoin(ns, key), value)
+			err := collect(ctx, ctx.keyJoin(ns, key), value)
 			if err != nil {
 				return err
 			}
