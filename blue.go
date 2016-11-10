@@ -9,7 +9,7 @@ import (
 type Options struct {
 	//This is the function that joins the keys when flattering the json object.
 	//The first argument is the top level key(although this might be not the
-	//case for deeply nested objects) and the scond is the current key.
+	//case for deeply nested objects) and the second is the current key.
 	//
 	// The returned string is the key that will be used. This is implementation
 	// specific, you can do whatever the hell you want with this.

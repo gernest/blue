@@ -7,10 +7,7 @@
 Generates influxdb line protocol from json objects.
 
 
-**WARNING**:
-- Do not use this in production.
-- There is a fail dose of interface{}
-usage, but don't worry this library DOES NOT use reflection.
+**WARNING**:Do not use this in production
 
 After saying that you should also know, I tested this on a live influxdb instance
 by hooking up a telegraf tail plugin to a named pipe that another commandline
@@ -69,7 +66,7 @@ Options strct looks like this.
 type Options struct {
 	//This is the function that joins the keys when flattering the json object.
 	//The first argument is the top level key(although this might be not the
-	//case for deeply nested objects) and the scond is the current key.
+	//case for deeply nested objects) and the second is the current key.
 	//
 	// The returned string is the key that will be used. This is implementation
 	// specific, you can do whatever the hell you want with this.
