@@ -19,8 +19,7 @@ influxdb line protocol using this library)
 
 # Features
 
-* Flexible
-  - Allow custom functions to choose
+* Flexible:Allow custom functions to choose
    - The name of the measurement
    - Tags
    - Fields
@@ -29,7 +28,7 @@ influxdb line protocol using this library)
 * Works on arbitrary json input.
 
 
-# The steps taken when processing the json inpu
+# The steps taken when processing the json input
 
 ## Flattening
 The json object is flattened to key, value pair.This is important because
@@ -63,7 +62,7 @@ pic what the user thinks is important. The main components are,
 - Tags
 - Fields
 
-The user of this library, has contol on alll the mentioned components. The
+The user of this library, has control on all the mentioned components. The
 Options strct looks like this.
 
 ```go
@@ -80,7 +79,7 @@ type Options struct {
 Specifying the Measurement field will make the IsMeasurent function to be
 ignored.
 
-## Outpu
+## Output
 
 Just call the `Line()` method of the returned `*Measurement` object and influxdb
 line compliant string will be generated.

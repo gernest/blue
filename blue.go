@@ -7,12 +7,40 @@ import (
 
 //Options provides fine grained options for processing the json input.
 type Options struct {
-	KeyJoinFunc   func(a, b string) string
-	IsTag         func(string) (string, bool)
-	IsField       func(string) bool
+	//This is the function that joins the keys when flattering the json object.
+	//The first argument is the top level key(although this might be not the
+	//case for deeply nested objects) and the scond is the current key.
+	//
+	// The returned string is the key that will be used. This is implementation
+	// specific, you can do whatever the hell you want with this.
+	KeyJoinFunc func(a, b string) string
+
+	// Checks  if the key is a tag. If the second returned value is true then
+	// the first returned value is going to be used as key.
+	//
+	// Something to consider here the key might be a joint keys for the deeply
+	// nested objects. The keys will be supposedly joined by the KeyJoinFunc
+	// implementation.
+	IsTag func(string) (string, bool)
+
+	// Checks if the aregumen( a key) belongs to a Field. Implementations should
+	// return true if the key is a field and false otherwise.
+	IsField func(string) bool
+
+	//IsMeasurement this determines if the given key is a key with the
+	//measurement name.
+	//
+	//It is up to the implementaion to return the measurement name, true. If the
+	//second returned value is false then the key is assumend to be not
+	//measurement name.
+	//
+	// If the Measurement field is set i.e not empty then this function is nver
+	// going to be used.
 	IsMeasurement func(string, interface{}) (string, bool)
-	IsTimeStamp   func(string, interface{}) (time.Time, bool)
-	Measurement   string
+
+	// Determines the timestamp of the measurement. Timestamp is set only once.
+	IsTimeStamp func(string, interface{}) (time.Time, bool)
+	Measurement string
 }
 
 //Line generates *Measurement object from the src. src is expected to be a valid
