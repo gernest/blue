@@ -166,3 +166,8 @@ func main() {
 	//ordinary,noun=broke,verb=bankrupt anger_level=80,this_is_nested_value=1 1434055562000000000
 }
 ```
+
+# Author
+Geofrey Ernest [@gernesti](https://twitter.com/gernesti)
+
+Logo  was  made by [@dr-okra](https://github.com/dr-okra)
