@@ -9,11 +9,6 @@ Generates influxdb line protocol from json objects.
 
 **WARNING**:Do not use this in production
 
-After saying that you should also know, I tested this on a live influxdb instance
-by hooking up a telegraf tail plugin to a named pipe that another commandline
-application was writing to( after converting live stream of json input to the
-influxdb line protocol using this library)
-
 # Features
 
 * Flexible:Allow custom functions to choose
